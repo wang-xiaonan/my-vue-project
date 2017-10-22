@@ -28,7 +28,7 @@ const app = express()
 // 1. mock data
 const appData = require('../data.json')
 const seller = appData.seller
-const goodes = appData.goodes
+const goods = appData.goods
 const ratings = appData.ratings
 // 2. config router
 const apiRouter = express.Router();
@@ -38,10 +38,10 @@ apiRouter.get('/seller',function(request,response){
     data:seller
   })
 })
-apiRouter.get('/goodes',function(req,res){
+apiRouter.get('/goods',function(req,res){
   res.json({
     errno:0,
-    data:goodes
+    data:goods
   })
 })
 apiRouter.get('/ratings',function(req,res){
