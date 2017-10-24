@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- <router-view/> -->
-    <!-- <div class="header">
-      header
-    </div> -->
     <stHeader></stHeader>
     <div class="tab">
       tab
@@ -16,7 +12,7 @@
 
 <script>
   import stHeader from '@/components/header/stHeader.vue'
-  
+
   export default {
     components: {
       stHeader
@@ -24,5 +20,5 @@
   }
 </script>
 
-<style>
+<style lang="stylus" rel="stylesheet/stylus">
 </style>
