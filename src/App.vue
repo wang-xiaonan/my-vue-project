@@ -1,7 +1,7 @@
 <template>
   <div>
     <stHeader></stHeader>
-    <div class="tab">
+    <div class="tab border-1px">
       <div class="tab-item">
         <router-link to="/goods">商品</router-link>
       </div>
@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script>
+<script type="text/javascript">
   import stHeader from '@/components/header/stHeader.vue'
 
   export default {
@@ -27,14 +27,15 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "./common/stylus/index.styl"
+  @import "./common/stylus/base.styl"
+  @import "./common/stylus/mixin.styl"
   .tab
     display: flex
     width 100%
     height 40px
     line-height 40px
     // border-bottom 1px solid rgba(7,17,27,.1)
-    border-1px (rgba(7,17,27,.1))
+    border-1px (rgba(7,17,27,0.1))
     .tab-item
       flex auto
       text-align center
