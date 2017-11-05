@@ -20,6 +20,16 @@
   import stHeader from '@/components/header/stHeader.vue'
 
   export default {
+    data () {
+      return {
+        seller: {}
+      }
+    },
+    created: function () {
+      this.$http.get('/api/seller').then(response => {
+        console.log(response.body)
+      })
+    },
     components: {
       stHeader
     }
