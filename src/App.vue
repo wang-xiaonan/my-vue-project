@@ -1,6 +1,6 @@
 <template>
   <div>
-    <stHeader></stHeader>
+    <stHeader :seller="seller"></stHeader>
     <div class="tab border-1px">
       <div class="tab-item">
         <router-link to="/goods">商品</router-link>
@@ -19,6 +19,8 @@
 <script type="text/javascript">
   import stHeader from '@/components/header/stHeader.vue'
 
+  const ERR_OK = 0
+
   export default {
     data () {
       return {
@@ -27,7 +29,11 @@
     },
     created: function () {
       this.$http.get('/api/seller').then(response => {
-        console.log(response.body)
+        let rs = response.body
+        if (rs.errno === ERR_OK) {
+          this.seller = rs.data
+          console.log(this.seller)
+        }
       })
     },
     components: {
