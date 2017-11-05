@@ -17,8 +17,17 @@
 	  	  	<span class="text">{{seller.supports[0].description}}</span>
 	  	  </div>
 	  	</div>
+	  	<div v-if="seller.supports" class="support-count">
+	  	  <span class="count">{{seller.supports.length}}个</span>
+	  	  <i class="right-icon st-keyboard_arrow_right"></i>
+	  	</div>
 	  </div>
-	  <div class="bulletin-wrapper"></div>
+	  <div class="bulletin-wrapper">
+	    <span class="title"></span><span class="text">{{seller.bulletin}}</span><i class="st-keyboard_arrow_right"></i>
+	  </div>
+	  <div class="background">
+	  	<img :src="seller.avatar" width="100%" height="100%">
+	  </div>
 	</div>
 </template>
 <script>
@@ -38,9 +47,11 @@
   @import "../../common/stylus/index.styl"
 
   .header
+    position relative
     color #fff
-    background #000
+    background rgba(7,17,27,.5)
   	.content-wrapper
+  	  position relative
   	  padding 24px 12px 18px 24px
   	  font-size 0
   	  .avatar
@@ -97,6 +108,60 @@
 	  	    line-height 12px
 	  	    font-size 10px
 	  	    color #fff
-  	  	  
+	  .support-count
+	  	position absolute
+	  	right 12px
+	  	bottom 14px
+	  	height 24px
+	  	padding 0 8px
+	  	height 24px
+	  	line-height 24px
+	  	border-radius 14px
+	  	text-align center
+	  	background rgba(0,0,0,.2)
+	  	.count
+	  	  vertical-align top
+	  	  font-size 10px
+	  	.right-icon
+	  	  margin-left 2px
+	  	  line-height 24px
+	  	  font-size 14px
+  	.bulletin-wrapper
+  	  position relative
+  	  height 28px
+  	  line-height 28px
+  	  padding 0 22px 0 12px
+  	  white-space nowrap
+  	  overflow hidden
+  	  text-overflow ellipsis
+  	  text-align center
+  	  background rgba(7,17,27,.2)
+  	  .title
+  	  	display inline-block
+  	  	vertical-align top
+  	  	margin-top 8px
+  	  	width 22px
+  	  	height 12px
+  	  	bg-img ('bulletin')
+  	  	background-size 22px 12px
+  	  	background-repeat no-repeat
+  	  .text
+  	  	vertical-align top
+  	  	margin 0 4px
+  	  	font-size 10px
+  	  	line-height 28px
+  	  .st-keyboard_arrow_right
+  	  	position absolute
+  	  	right 10px
+  	  	top 7px
+  	  	font-size 14px
+  	.background
+  	  position absolute
+  	  top 0
+  	  left 0 
+  	  width 100%
+  	  height 100%
+  	  z-index -1
+  	  filter blur(10px)
   	  	    
 </style>
