@@ -17,7 +17,7 @@
 	  	  	<span class="text">{{seller.supports[0].description}}</span>
 	  	  </div>
 	  	</div>
-	  	<div v-if="seller.supports" class="support-count">
+	  	<div v-if="seller.supports" class="support-count" @click="showDetail">
 	  	  <span class="count">{{seller.supports.length}}个</span>
 	  	  <i class="right-icon st-keyboard_arrow_right"></i>
 	  	</div>
@@ -28,6 +28,7 @@
 	  <div class="background">
 	  	<img :src="seller.avatar" width="100%" height="100%">
 	  </div>
+	  <div v-show="detailShow" class="detail clearFix"></div>
 	</div>
 </template>
 <script>
@@ -36,6 +37,16 @@
     props: {
       seller: {
         type: Object
+      }
+    },
+    data: function () {
+      return {
+        detailShow: false
+      }
+    },
+    method: {
+      showDetail: function () {
+        this.detailShow = true
       }
     },
     created: function () {
@@ -50,6 +61,7 @@
     position relative
     color #fff
     background rgba(7,17,27,.5)
+    overflow hidden
   	.content-wrapper
   	  position relative
   	  padding 24px 12px 18px 24px
@@ -67,7 +79,7 @@
   	  	  .brand
   	  	  	display inline-block
   	  	  	vertical-align top
-  	  	  	width 30px 
+  	  	  	width 30px
   	  	  	height 18px
   	  	  	bg-img ('brand')
   	  	  	background-size 30px 18px
@@ -158,10 +170,17 @@
   	.background
   	  position absolute
   	  top 0
-  	  left 0 
+  	  left 0
   	  width 100%
   	  height 100%
   	  z-index -1
   	  filter blur(10px)
-  	  	    
+  	.detail
+      position fixed
+      z-index 100
+      top 0
+      left 0
+      width 100%
+      height 100%
+      background rgba(7,17,27,.8)
 </style>

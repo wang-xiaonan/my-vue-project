@@ -32,7 +32,6 @@
         let rs = response.body
         if (rs.errno === ERR_OK) {
           this.seller = rs.data
-          console.log(this.seller)
         }
       })
     },
@@ -44,7 +43,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "./common/stylus/index.styl"
-  
+
   .tab
     display: flex
     width 100%
