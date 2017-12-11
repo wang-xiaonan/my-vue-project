@@ -154,7 +154,6 @@
 	  	bottom 14px
 	  	height 24px
 	  	padding 0 8px
-	  	height 24px
 	  	line-height 24px
 	  	border-radius 14px
 	  	text-align center
