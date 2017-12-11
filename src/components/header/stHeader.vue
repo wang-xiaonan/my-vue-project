@@ -13,50 +13,89 @@
 	  	  	{{seller.description}}/{{seller.deliveryTime}}分钟送达
 	  	  </div>
 	  	  <div v-if="seller.supports" class="support">
-	  	  	<span class="icon" :class="classMap[seller.supports[0].type]"></span>
+          <type class="icon" :type="seller.supports[0].type" :size="1"></type>
 	  	  	<span class="text">{{seller.supports[0].description}}</span>
 	  	  </div>
 	  	</div>
 	  	<div v-if="seller.supports" class="support-count" @click="showDetail">
 	  	  <span class="count">{{seller.supports.length}}个</span>
-	  	  <i class="right-icon st-keyboard_arrow_right"></i>
+        <i class="right-icon st-keyboard_arrow_right"></i>
 	  	</div>
 	  </div>
-	  <div class="bulletin-wrapper">
+	  <div class="bulletin-wrapper" @click="showDetail">
 	    <span class="title"></span><span class="text">{{seller.bulletin}}</span><i class="st-keyboard_arrow_right"></i>
 	  </div>
 	  <div class="background">
 	  	<img :src="seller.avatar" width="100%" height="100%">
 	  </div>
-	  <div v-show="detailShow" class="detail clearFix"></div>
+    <transition name="fade">
+	    <div v-show="detailShow" class="detail">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+          <h1 class="name">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star :size="48" :score="seller.score"></star>
+          </div>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">优惠信息</div>
+            <div class="line"></div>
+          </div>
+          <ul v-if="seller.supports" class="supports">
+            <li class="support-item" v-for="item in seller.supports">
+              <type class="icon" :type="item.type" :size="2"></type>
+              <span class="text">{{item.description}}</span>
+            </li>
+          </ul>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">商家公告</div>
+            <div class="line"></div>
+          </div>
+          <div class="bulletin">
+            <p class="content">{{seller.bulletin}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="detail-close" @click="closeDetail">
+        <i class="st-close"></i>
+      </div>
+    </div>
+    </transition>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
+  import star from '@/components/star/star.vue'
+  import type from '@/components/type/type.vue'
+
   export default {
     name: 'stHeader',
+    components: {
+      star,
+      type
+    },
     props: {
       seller: {
         type: Object
       }
     },
-    data: function () {
+    data () {
       return {
         detailShow: false
       }
     },
-    method: {
-      showDetail: function () {
+    methods: {
+      showDetail () {
         this.detailShow = true
+      },
+      closeDetail () {
+        this.detailShow = false
       }
-    },
-    created: function () {
-      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     }
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/index.styl"
-
   .header
     position relative
     color #fff
@@ -105,17 +144,6 @@
 	  	    height 12px
 	  	    vertical-align top
 	  	    background-size 12px 12px
-	  	    background-repeat no-repeat
-	  	    &.decrease
-	  	      bg-img ('decrease_1')
-	  	    &.discount
-	  	    	bg-img ('discount_1')
-	  	    &.special
-	  	    	bg-img ('special_1')
-	  	    &.invoice
-	  	    	bg-img ('invoice_1')
-	  	    &.guarantee
-	  	    	bg-img ('guarantee_1')
 	  	  .text
 	  	    line-height 12px
 	  	    font-size 10px
@@ -182,5 +210,79 @@
       left 0
       width 100%
       height 100%
+      overflow auto
       background rgba(7,17,27,.8)
+      backdrop-filter blur(10px)
+      &.fade-enter-active,&.fade-leave-active
+        transition: opacity .3s
+      &.fade-transition
+        opacity 1
+      &.fade-enter,&.fade-leave-to
+        opacity 0
+      .detail-wrapper
+        min-height 100%
+        width 100%
+        .detail-main
+          margin-top 64px
+          padding-bottom 64px
+          .name
+            line-height 16px
+            text-align center
+            font-size 16px
+            font-weight 700
+          .star-wrapper
+            margin-top 18px
+            padding 2px 0
+            text-align center
+          .title
+            display flex
+            width 80%
+            margin 28px auto 24px auto
+            .line
+              flex 1
+              position relative
+              top -6px
+              border-bottom 1px solid rgba(255,255,255,.2)
+            .text
+              padding 0 12px
+              font-weight 700
+              font-size 14px
+              line-height 14px
+          .supports
+            width 80%
+            margin 0 auto
+            .support-item
+              padding 0 12px
+              margin-bottom 12px
+              font-size 0
+              &:last-child
+                margin-bottom 0
+              .icon
+                display inline-block
+                width 16px
+                height 16px
+                vertical-align top
+                margin-right  6px
+                background-size 16px 16px
+              .text
+                font-size 16px
+                line-height 16px
+                font-weight 200
+                vertical-align top
+          .bulletin
+            width 80%
+            margin 0 auto
+            .content
+              padding 0 12px
+              font-size 16px
+              line-height 24px
+              font-weight 200
+      .detail-close
+        position relative
+        width 32px
+        height 32px
+        margin -64px auto 0 auto
+        clear both
+        font-size 32px
+        color rgba(255,255,255,.5)
 </style>
