@@ -1,15 +1,15 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="foodWrapper">
       <ul v-if="goods">
-        <li v-for="item in goods" class="menu-item">
+        <li v-for="item(item, index) in goods" class="menu-item" :class="{'current':currentIndex === index}" @click="selectMenu(index)">
           <span class="text border-1px">
             <type class="icon" v-show="item.type > 0" :type="item.type" :size="3"></type>{{item.name}}
           </span>
         </li>
       </ul>
     </div>
-    <div class="goods-wrapper">
+    <div class="goods-wrapper" ref="goodsWrapper">
       <ul v-if="goods">
         <li v-for="item in goods" class="food-list">
           <h1 class="title">{{item.name}}</h1>
@@ -40,6 +40,8 @@
 
 <script>
   import type from '@/components/type/type.vue'
+  import BScroll from 'better-scroll'
+
   const ERR_OK = 0
 
   export default {
@@ -53,7 +55,21 @@
     },
     data () {
       return {
-        goods: {}
+        goods: [],
+        foodListHeight: [],
+        scrollY: 0
+      }
+    },
+    computed: {
+      currentIndex () {
+        for (let i = 0; i < this.foodListHeight.length; i++) {
+          let h1 = this.foodListHeight[i]
+          let h2 = this.foodListHeight[i + 1]
+          if (!h2 || (this.scrollY >= h1 && this.scrollY < h2)) {
+            return i
+          }
+        }
+        return 0
       }
     },
     created () {
@@ -61,8 +77,39 @@
         let rs = response.body
         if (rs.errno === ERR_OK) {
           this.goods = rs.data
+          this.$nextTick(() => {
+            this.initScroll()
+            this.calculateHeight()
+          })
         }
       })
+    },
+    methods: {
+      initScroll () {
+        this.menuScroll = new BScroll(this.$refs.foodWrapper, {
+          click: true
+        })
+        this.goodsScroll = new BScroll(this.$refs.goodsWrapper, {
+          probeType: 3
+        })
+        this.goodsScroll.on('scroll', (pos) => {
+          this.scrollY = Math.abs(Math.round(pos.y))
+        })
+      },
+      calculateHeight () {
+        let foodsList = this.$refs.goodsWrapper.getElementsByClassName('food-list')
+        let _height = 0
+        this.foodListHeight.push(_height)
+        for (let i = 0; i < foodsList.length; i++) {
+          _height += foodsList[i].clientHeight
+          this.foodListHeight.push(_height)
+        }
+      },
+      selectMenu (index) {
+        let foodsList = this.$refs.goodsWrapper.getElementsByClassName('food-list')
+        let topEl = foodsList[index]
+        this.goodsScroll.scrollToElement(topEl, 500)
+      }
     }
   }
 </script>
@@ -88,6 +135,11 @@
         width 56px
         line-height 14px
         padding 0 12px
+        &.current
+          background #fff
+          font-weight 700
+          .text
+            border-1px-none()
         .text
           display table-cell
           vertical-align middle
@@ -131,12 +183,19 @@
             color rgb(7,17,27)
           .desc, .extra
             font-size 10px
-            height 10px
-            line-height 10px
             margin-top 8px
             color rgb(147,153,159)
+          .desc
+            height 12px
+            line-height 12px
+            width 50%
+            white-space nowrap
+            overflow hidden
+            text-overflow ellipsis
           .extra
-            &.sellcount
+            height 10px
+            line-height 10px
+            .sellcount
               margin-right 12px
           .price
             margin-top 8px
@@ -148,7 +207,7 @@
               margin-right 8px
               font-size 18px
               font-weight 700
-            .oldpaice
+            .oldprice
               font-size 10px
               text-decoration line-through
               color rgb(147,153,159)
