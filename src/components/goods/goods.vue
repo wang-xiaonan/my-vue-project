@@ -29,24 +29,32 @@
                   ¥<span class="nowprice">{{food.price}}</span>
                   <span v-show="food.oldPrice" class="oldprice">¥{{food.oldPrice}}</span>
                 </div>
+                <div class="control-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shoppingcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shoppingcart>
   </div>
 </template>
 
 <script>
   import type from '@/components/type/type.vue'
   import BScroll from 'better-scroll'
+  import shoppingcart from '@/components/shoppingcart/shoppingcart.vue'
+  import cartcontrol from '@/components/cartcontrol/cartcontrol.vue'
 
   const ERR_OK = 0
 
   export default {
     components: {
-      type
+      type,
+      shoppingcart,
+      cartcontrol
     },
     props: {
       seller: {
@@ -70,6 +78,17 @@
           }
         }
         return 0
+      },
+      selectFoods () {
+        let foods = []
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
     created () {
@@ -90,6 +109,7 @@
           click: true
         })
         this.goodsScroll = new BScroll(this.$refs.goodsWrapper, {
+          click: true,
           probeType: 3
         })
         this.goodsScroll.on('scroll', (pos) => {
@@ -188,8 +208,8 @@
           .desc
             height 12px
             line-height 12px
-            width 50%
-            white-space nowrap
+            /*width 50%*/
+            /*white-space nowrap*/
             overflow hidden
             text-overflow ellipsis
           .extra
@@ -211,5 +231,8 @@
               font-size 10px
               text-decoration line-through
               color rgb(147,153,159)
-
+          .control-wrapper
+            position absolute
+            right 0
+            bottom 12px
 </style>
