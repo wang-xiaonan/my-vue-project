@@ -1,10 +1,10 @@
 <template>
   <div class="cartControl">
     <transition name="fade">
-      <div v-show="food.count>0" class="cart-decrease st-remove_circle_outline" @click="decreaseCart"></div>
+      <div v-show="food.count>0" class="cart-decrease st-remove_circle_outline" @click.stop.prevent="decreaseCart"></div>
     </transition>
     <div v-show="food.count>0" class="cart-count">{{food.count}}</div>
-    <div class="cart-add st-add_circle" @click="addCart"></div>
+    <div class="cart-add st-add_circle" @click.stop.prevent="addCart($event)"></div>
   </div>
 </template>
 
@@ -18,13 +18,15 @@
       }
     },
     methods: {
-      addCart () {
+      addCart (event) {
         if (!this.food.count) {
-          // vue中直接给赋值一个没有的字段要用vue的set接口
+          // vue中直接赋值一个没有的字段要用vue的set接口
           Vue.set(this.food, 'count', 1)
         } else {
           this.food.count++
         }
+        // 2.0中已废除$dispatch,$broadcast
+        this.$root.eventsHub.$emit('cart.add', event.target)
       },
       decreaseCart () {
         if (this.food.count > 0) {

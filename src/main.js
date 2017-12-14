@@ -12,6 +12,11 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#main',
+  data () {
+    return {
+      eventsHub: new Vue()
+    }
+  },
   router: router,
   render: h => h(App)
 })
